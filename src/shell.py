@@ -10,6 +10,8 @@ from src.client import Client
 from src.logging import logger
 import time
 
+import yaml
+
 from bigtree import list_to_tree
 import readchar
 import sys
@@ -51,8 +53,12 @@ class Shell(Cmd):
             self.stdout.write("\r" + value)
 
     def printchar(self, value):
+        # value = 'ß'
+        logger.debug('aaa')
         self.stdout.write(value)
+        logger.debug('bbb')
         self.stdout.flush()
+        logger.debug('ccc')
 
     def printline(self, value):
         self.print(value + '\n\r')
@@ -127,11 +133,25 @@ class Shell(Cmd):
                         if not self.session.is_alive():
                             self.stop_cmdloop = True
                         c = self.stdin.read(1)  # reads one byte at a time, similar to getchar()
+                        if c == b'\xc3':
+                            # 2 byte character
+                            logger.debug("character with 2 bytes")
+                            d = self.stdin.read(1)
+                            e = c+d
+                            c = e
+                            logger.debug(c)
+                            f = str(c.decode("utf-8"))
+                            c = f
+                            print(type(c))
+                        else:
+                            # 1 byte character
+                            c_as_string = str(c.decode("utf-8"))
                         logger.info(c)
                         logger.info(type(c))
                         logger.info(hex(ord(c)))
 
                         if c == b'\r':  # Enter Key
+                            logger.debug('key: enter')
                             # command = line.strip()
                             # logger.info("1 command: " + command + "---")
                             try:
@@ -139,14 +159,14 @@ class Shell(Cmd):
                                 # command_list = self.cmd_tree.get_list_of_commands(line)
 
                                 if line == 'show router 6203 bfd session':
-                                    logger.debug('show router 6203 bfd session')
+                                    logger.debug('enter key: show router 6203 bfd session')
                                     self.printline('')
                                     func = getattr(self, 'do_' + 'show_router_6203')
                                     func(arg)
                                     line = ''
                                     self.printcomandline('\n')
                                 elif line == 'show router 100012000 bfd session':
-                                    logger.debug('show router 100012000 bfd session')
+                                    logger.debug('enter key: show router 100012000 bfd session')
                                     self.printline('')
                                     func = getattr(self, 'do_' + 'show_router_100012000')
                                     func(arg)
@@ -154,7 +174,7 @@ class Shell(Cmd):
                                     self.printcomandline('\n')
                                 # elif line == 'ping router 6203 source 10.251.74.130 10.251.74.129 count 1':
                                 elif 'ping router 6207' in line:
-                                    logger.debug('cmg_loop: ping router 6207')
+                                    logger.debug('enter key: ping router 6207')
                                     self.printline('')
                                     func = getattr(self, 'do_' + 'ping_router_6207')
                                     func(arg)
@@ -162,7 +182,7 @@ class Shell(Cmd):
                                     # self.printline('')
                                     self.printcomandline('\n')
                                 elif 'ping router' in line:
-                                    logger.debug('cmg_loop: ping router')
+                                    logger.debug('enter key: ping router')
                                     self.printline('')
                                     func = getattr(self, 'do_' + 'ping')
                                     func(arg)
@@ -171,33 +191,41 @@ class Shell(Cmd):
                                 elif line == 'quit':
                                     # Todo: is the session really closed
                                     #  because the putty behaviour is different compared to the real CMG
-                                    logger.debug('cmg_loop: quit')
+                                    logger.debug('enter key: quit')
                                     self.stop_cmdloop = "q"
                                 elif line == '':
-                                    logger.debug('cmg_loop: empty line')
+                                    logger.debug('enter key: empty line')
                                     self.printline('')
                                     self.printcomandline('')
                                     # print("\033[%d;%dH" % (5, 5))
                                 else:
                                     # no command could be found
-                                    logger.debug('cmg_loop: else')
+                                    logger.debug('enter key: else')
                                     line = ''
                                     self.printline('')
                                     self.printcomandline('\n')
                             except Exception as error:
                                 print("An exception occurred:", error)
-
-                        elif c == b'a' or b'b' or b'c' or b'd' or b'e' or b'f' or b'g' or b'h' or b'i' or \
-                                b'j' or b'k' or b'l' or b'm' or b'n' or b'o' or b'p' or b'q' or b'r' or b's' \
-                                or b't' or b'u' or b'v' or b'g' or b'x' or b'y' or b'z':
-                            self.printchar(c.decode("utf-8"))
-                            line = line + c.decode("utf-8")
+                        # elif c == b'a' or b'b' or b'c' or b'd' or b'e' or b'f' or b'g' or b'h' or b'i' or \
+                        #         b'j' or b'k' or b'l' or b'm' or b'n' or b'o' or b'p' or b'q' or b'r' or b's' \
+                        #         or b't' or b'u' or b'v' or b'g' or b'x' or b'y' or b'z':
+                        #     logger.debug('cmd_loop: a-z')
+                        #     self.printchar(c.decode("utf-8"))
+                        #     line = line + c.decode("utf-8")
+                        elif c_as_string.isprintable():
+                            logger.debug('cmd_loop: isprintable()' + ': ' + str(c))
+                            self.printchar(c_as_string)
+                            line = line + c_as_string
+                            logger.debug('line: ' + line)
                         elif c == b'\x7f':  # backspace
+                            logger.debug('cmd_loop: backspace')
                             self.printchar(c.decode("utf-8"))
                             logger.info(line)
                         elif c == b'\x03':  # CTRL + C
+                            logger.debug('cmd_loop: CTRL + C')
                             self.stop_cmdloop = "q"
                         elif c == b'\t':  # Tab
+                            logger.debug('cmd_loop: Tab')
                             command_list = self.cmd_tree.get_list_of_commands(line)
                             command = line.rpartition(' ')[-1]
                             commands_found = []  # counts how often the command has been found in the list
@@ -228,11 +256,12 @@ class Shell(Cmd):
                                     self.stdout.flush()
                             logger.info("command: " + command)
                         elif c == b'':
-                            logger.info("xxxxx")
+                            logger.debug('cmd_loop: empty')
                             self.stop_cmdloop = "q"
                         else:
-                            logger.debug("else")
-                            line = line + c.decode("utf-8")
+                            logger.debug("cmd_loop: else")
+                            # line = line + c.decode("utf-8")
+                            line = line + c_as_string
             self.postloop()
         finally:
             if self.use_rawinput and self.completekey:
