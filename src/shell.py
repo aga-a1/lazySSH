@@ -10,8 +10,6 @@ from src.client import Client
 from src.logging import logger
 import time
 
-import yaml
-
 from bigtree import list_to_tree
 import readchar
 import sys
@@ -68,6 +66,7 @@ class Shell(Cmd):
         lines_of_terminal = 50
         for line in value.split('\n'):
             if line_counter % lines_of_terminal == 0:
+                # Todo: \rPress any key to continue (Q to quit)\x00\r\n
                 self.print('\rPress any key to continue (Q to quit)\r')
                 c = self.stdin.read(1)
                 # self.printline(line)
@@ -172,7 +171,13 @@ class Shell(Cmd):
                                     func(arg)
                                     line = ''
                                     self.printcomandline('\n')
-                                # elif line == 'ping router 6203 source 10.251.74.130 10.251.74.129 count 1':
+                                elif line == 'show router 9999 bfd session':
+                                    logger.debug('enter key: show router 9999 bfd session')
+                                    self.printline('')
+                                    func = getattr(self, 'do_' + 'show_router_9999_bfd_session')
+                                    func(arg)
+                                    line = ''
+                                    self.printcomandline('\n')
                                 elif 'ping router 6207' in line:
                                     logger.debug('enter key: ping router 6207')
                                     self.printline('')
@@ -306,8 +311,17 @@ Request timed out. icmp_seq=1.
         self.print_screen(output)
         logger.info("----- do_ping")
 
+    def do_show_router_9999_bfd_session(self, arg):
+        # command: show router 9999 bfd session
+        logger.info("+++++ do_show_router_9999_bfd_session")
+        logger.info(arg)
+        # output = self.cmg.__config_file['show_router_9999_bfd_session']
+        output = self.cmg.get_config_file()
+        self.print_screen(output)
+        logger.info("----- do_show_router_9999_bfd_session")
+
     def do_show_router_100012000(self, arg):
-        logger.info("+++++ do_show_router")
+        logger.info("+++++ do_show_router_100012000")
         logger.info(arg)
 
         output = ('===============================================================================\n'

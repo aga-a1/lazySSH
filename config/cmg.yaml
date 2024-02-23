@@ -1,0 +1,32 @@
+show_router_9999_bfd_session: |
+  ===============================================================================
+  Legend:
+    Session Id = Interface Name | LSP Name | Prefix | RSVP Sess Name | Service Id
+    wp = Working path   pp = Protecting path
+  ===============================================================================
+  BFD Session
+  ===============================================================================
+  Session Id                                        State      Tx Pkts    Rx Pkts
+    Rem Addr/Info/SdpId:VcId                      Multipl     Tx Intvl   Rx Intvl
+    Protocols                                        Type     LAG Port     LAG ID
+    Loc Addr
+  -------------------------------------------------------------------------------
+  CMG901101_GI-AAA_LB1AL1                            Down     48048434   39259323
+    10.247.182.1                                        3          100        100
+    static                                            iom          N/A        N/A
+    10.247.182.2
+  CMG901101_GI-AAA_LB2AL1                              Up     48047670   39259323
+    10.247.182.9                                        3          100        100
+    static                                            iom          N/A        N/A
+    10.247.182.10
+  CMG901101_GI-AAA_LB1AL2                              Up     48048182   39262126
+    10.247.182.17                                       3          100        100
+    static                                            iom          N/A        N/A
+    10.247.182.18
+  CMG901101_GI-AAA_LB2AL2                              Up     48048195   39262126
+    10.247.182.25                                       3          100        100
+    static                                            iom          N/A        N/A
+    10.247.182.26
+  -------------------------------------------------------------------------------
+  No. of BFD sessions: 4
+  ===============================================================================
