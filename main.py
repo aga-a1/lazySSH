@@ -20,12 +20,16 @@ if __name__ == '__main__':
     logger.info('Starting SSH Server')
 
     # server = SshServer('/home/cmg/.ssh/id_rsa')
-    server = SshServer('id_rsa')
+    server = SshServer('config/id_rsa')
 
     # Start the server, you can give it a custom IP address and port, or
     # leave it empty to run on 127.0.0.1:22
     server.start(port=2222)
     while True:  # Todo: this is most probably not a good solution
         # Todo: without this solution the Main Thread Ends before the client thread has been started
+        logger.info('entering loop')
         time.sleep(60)
+        # logger.info('stopping server')
+        # server.stop()
+        # break
     logger.info("end main")
