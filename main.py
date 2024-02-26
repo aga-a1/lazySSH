@@ -20,7 +20,7 @@ if __name__ == '__main__':
     logger.info('Starting SSH Server')
 
     # server = SshServer('/home/cmg/.ssh/id_rsa')
-    server = SshServer('config/id_rsa')
+    server = SshServer('./lazySSH/config/id_rsa')
 
     # Start the server, you can give it a custom IP address and port, or
     # leave it empty to run on 127.0.0.1:22
