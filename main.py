@@ -18,6 +18,10 @@ if __name__ == '__main__':
     # If you put a password, include it as the second parameter, otherwise don't include it.
 
     logger.info('Starting SSH Server')
+    logger.info("-------------------")
+    logger.info("###################")
+    logger.info("*******************")
+    logger.info("!!!!!!!!!!!!!!!!!!!")
 
     # server = SshServer('/home/cmg/.ssh/id_rsa')
     # Todo: path must be independent from where it is started
