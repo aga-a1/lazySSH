@@ -79,8 +79,8 @@ class ServerBase(ABC):
                 self.client_thread = threading.Thread(target=self.connection_function, args=(client,), daemon=True)
                 self.client_thread.start()
                 # self.client_thread.
-            except socket.timeout:
-                pass
+            except Exception as error:
+                print("xxx An exception occurred:", error)
 
     @abstractmethod
     def connection_function(self, client: Client):

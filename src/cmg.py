@@ -9,7 +9,7 @@ class Cmg:
         # Intro - Message to be output when cmdloop() is called.
         self.__config_file_name = './config/cmg.yaml'
         self.__config_file = self.__read_config_file(self.__config_file_name)
-        print(self.__config_file['show_router_9999_bfd_session'])
+        # print(self.__config_file['show_router_9999_bfd_session'])
         self._intro = """Fake OS Software\r
 Copyright (c) Ing. Bernhard Wagesreiter 2024.  All Rights Reserved.\n\r"""
 

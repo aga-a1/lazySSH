@@ -36,7 +36,7 @@ class Shell(Cmd):
         # self.prompt = '*A:CMG901101# '
         self.command_context = ''
 
-        self.cmd_tree = src.command_tree.CommandTree()
+        # self.cmd_tree = src.command_tree.CommandTree()
 
         logger.info(f'User {self.client.username} connected from {self.client.host}:{self.client.port}')
 
