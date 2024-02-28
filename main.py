@@ -21,7 +21,7 @@ if __name__ == '__main__':
     logger.info("-------------------")
     logger.info("###################")
     logger.info("*******************")
-    logger.info("+++++++++++++++++++")
+    logger.info("$$$$$$$$$$$$$$$$$$$")
 
     # server = SshServer('/home/cmg/.ssh/id_rsa')
     # Todo: path must be independent from where it is started
